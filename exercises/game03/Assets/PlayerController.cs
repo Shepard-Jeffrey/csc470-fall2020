@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
 {
 	float speed = 8f;
 	float rotateSpeed = 120f;
-	int score = 0;
 
 	// This value is set in the Unity editor by dragging the Text object
 	// into the slot in the inspector.
@@ -34,30 +33,30 @@ public class PlayerController : MonoBehaviour
 		//transform.position = transform.position + transform.forward * Time.deltaTime;
 		// NOTE: We add the modifer "Space.World" to make it so that the movement
 		// works the way that we expect (i.e. using the global coordinate system).
-		transform.Translate(transform.forward * speed * Time.deltaTime);//, Space.World);		
+		float vAxis = Input.GetAxis("Vertical");
+		transform.Translate(transform.forward * speed * Time.deltaTime * vAxis, Space.World);
 
 		// --- Simulating skateboarding ---
 		// Make speed go down over time.
-		if (speed > 0)
-		{
-			speed -= 4 * Time.deltaTime;
-		}
 		// Make it so we move faster when we press space
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			speed += 5;
+			
+			//Turn cell alive
+
+			//Make cell have extra collider
+
+			//Mark as trigger
+
+			//OnTriggerEnter to player controller
+
+			//When I collide with something, store it. 
+
+			//Use the button that turns simulation on or off. 
+
+			//Only update if boolean is true. 
+
+			//Line 51 of update in gamemanager. 
 		}
-		// Make sure speed doesn't get less than zero or greater than 15.
-		speed = Mathf.Clamp(speed, 0, 15);
-	}
-
-	void OnTriggerEnter(Collider other)
-	{
-
-		if (other.CompareTag("pika"))
-		{
-			Destroy(other.gameObject);
-		}
-
 	}
 }

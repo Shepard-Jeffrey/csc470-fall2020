@@ -652,7 +652,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.05
+      value: 4.142025
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
@@ -662,27 +662,27 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.8433
+      value: 2.258752
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.01683723
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: -0.9998583
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
@@ -697,7 +697,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 358.071
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c12f4dfa416e606458c2172509129a97,
         type: 3}
@@ -813,6 +813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5428e34ee5fec72499a2946b5bcebf12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreText: {fileID: 0}
 --- !u!1 &962068844
 GameObject:
   m_ObjectHideFlags: 0

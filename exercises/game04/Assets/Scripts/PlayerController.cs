@@ -16,8 +16,12 @@ public class PlayerController : MonoBehaviour
 	float gravityModifier = 0.05f;
 	float keysCollected = 0;
 
+	public BoxCollider NewFloor;
+	public MeshCollider Plane2;
+	public GameObject Door;
+
 	public MovingPlatform PlatformAttachedTo;
-	
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -34,12 +38,11 @@ public class PlayerController : MonoBehaviour
 		//Rotate on the y axis based on the hAxis value
 		//NOTE: If the player isn't pressing left or right, hAxis will be 0 and there will be no rotation
 		transform.Rotate(0, hAxis * rotateSpeed * Time.deltaTime, 0);
-
-
+	//If we're not on the ground, apply "gravity" to yVelocity
+			yVelocity = yVelocity + Physics.gravity.y * gravityModifier * Time.deltaTime;
 		//--- DEALING WITH GRAVITY ---
 		if (!cc.isGrounded) { //If we go in this block of code, cc.isGrounded is false (that's what the ! does)
-			//If we're not on the ground, apply "gravity" to yVelocity
-			yVelocity = yVelocity + Physics.gravity.y * gravityModifier * Time.deltaTime;
+		
 
 			//If we are moving upward (yVelocity > 0), and the player has released the jump button
 			//start falling downward (by setting the yVelocity to 0)
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour
 			//make the player start moving upwards, and gravity will start slowing the movement upward
 			//and eventually make the player hit the ground (thus landing in the 'if' statment above)
 			if (Input.GetKeyDown(KeyCode.Space)) {
-				yVelocity = jumpForce;
+				yVelocity = jumpForce; // * Time.deltaTime?;
 			}
 		}
 
@@ -102,7 +105,11 @@ public class PlayerController : MonoBehaviour
 			Destroy(other.gameObject);
 			keysCollected++;
 			Debug.Log(keysCollected);
-
+			Door.transform.Rotate(0,90,0);
+		}
+		
+		if (other.CompareTag("NextLevel")) {
+			Plane2.enabled = true;
 		}
 	}
 }

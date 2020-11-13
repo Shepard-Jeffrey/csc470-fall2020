@@ -78,7 +78,9 @@ public class GameManager : MonoBehaviour
             TimerText.gameObject.SetActive(false);
             // DragonText.enable = true;
             DragonText.gameObject.SetActive(true);
-        }  
+            NarrateText.text = ("Fight the Dragon!");
+
+        }
 
         if (Input.GetMouseButton(0)) { // & ATKMine Selected?
             unitATK += 1 * Time.deltaTime;
@@ -193,11 +195,19 @@ public class GameManager : MonoBehaviour
 
     public void DragonAttack ()
     {
-        unitHP -= 5;
+        if (DragonHP <= 0)
+        {
+            NarrateText.text = ("Player slew the dragon! Congratulations!");
+            DragonText.text = ("Dragon: Dead");
+        }
+        else
+        {
+            unitHP -= 5;
 
-        HPText.text = ("HP: " + (unitHP)); 
-        NarrateText.text = ("The dragon fought back, burning the player with its firey breath!");
+            HPText.text = ("HP: " + (unitHP));
+            NarrateText.text = ("The dragon fought back, burning the player with its firey breath!");
 
-        //play playerdamaged animation
+            //play playerdamaged animation
+        }
     }
 }

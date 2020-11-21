@@ -4,9 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// Please Note:
-// I had a working title screen, but it's having trouble loading now giving me "Null Reference Exception", so I'm building my game for the web without it. 
-
 public class GameManager : MonoBehaviour
 {
     public UnitScript selectedUnit;
@@ -39,10 +36,11 @@ public class GameManager : MonoBehaviour
 
     public float Timer;
     public float unitHP;
-    public float unitATK;
-    public float unitDEF;
-    public float unitMAG;
+   
     public float DragonHP;
+
+    public Animator UnitAnimator; 
+    public Animator DragonAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -61,39 +59,50 @@ public class GameManager : MonoBehaviour
 
         // When the timer reaches zero, move the player and camera to the boss fight, enable the attack buttons, make sure this code only runs once. 
 
-        if (Timer < 0 && RunOnce) {
+        if (Timer < 0 && RunOnce) { // I only want this to happen once, so i just use the bool runonce to make that happen. 
             cc.Move(DragonReference.transform.position - Unit.transform.position);
+            selectedUnit.targetPosition = DragonReference.transform.position;
            // Camera.transform.position = (CameraReference.transform.position - Camera.transform.position);
-            // Camera.transform.Rotate(CameraReference.transform.rotation - Camera.transform.rotation);
+         //   Camera.transform.rotation = CameraReference.transform.rotation;
             Camera.transform.position = new Vector3 (10, 13, -42);
 
             AttackButton.gameObject.SetActive(true);
             MagicButton.gameObject.SetActive(true);
             // reveal the combat buttons
-            unitATK = Mathf.RoundToInt(unitATK);
-            unitDEF = Mathf.RoundToInt(unitDEF);
-            unitATK = Mathf.RoundToInt(unitDEF);
+            selectedUnit.ATK = Mathf.RoundToInt(selectedUnit.ATK);
+            selectedUnit.DEF = Mathf.RoundToInt(selectedUnit.DEF);
+            selectedUnit.MAG = Mathf.RoundToInt(selectedUnit.MAG);
+
             // when it's time for combat, round all the numbers. 
-            RunOnce = false;
+
+            if (selectedUnit.ATK > 1000)
+            {
+                selectedUnit.ATK = 1000;
+            }
+            if (selectedUnit.DEF > 1000)
+            {
+                selectedUnit.DEF = 1000;
+            }
+            if (selectedUnit.MAG > 1000)
+            {
+                selectedUnit.MAG = 1000;
+            }
+
+            // Setting cap to 1000, these were all 100, but I changed it to 1000 to make the meter go up slower. 
+
             TimerText.gameObject.SetActive(false);
             // DragonText.enable = true;
             DragonText.gameObject.SetActive(true);
             NarrateText.text = ("Fight the Dragon!");
 
+            RunOnce = false;
+
+            selectedUnit.DragonFightStarted = true;
+            selectedUnit.selected = false;
+
         }
 
-        if (Input.GetMouseButton(0)) { // & ATKMine Selected?
-            unitATK += 1 * Time.deltaTime;
-        }
-
-        if (Input.GetMouseButton(0)) { // & DEFMine Selected?
-            unitDEF += 1 * Time.deltaTime;
-        }
-
-        if (Input.GetMouseButton(0)) { // & MagMine Selected?
-            unitMAG += 1 * Time.deltaTime;
-        }
-
+    
     }
     
     public void GoButtonClicked()
@@ -147,67 +156,80 @@ public class GameManager : MonoBehaviour
         StatPanel.SetActive(true);
     }
 
-    public void Continue ()
-    {
-        SceneManager.LoadScene("Game5Scene");
-
-    }
-
     public void UseAttack ()
     {
-        DragonHP -= 1 * unitATK;
+        DragonAnimator.SetBool("dragonDamaged", true);
+
+        DragonHP -= 1 * (selectedUnit.ATK/10); // factors in player unit's attack for the damage
 
         NarrateText.text = ("The player struck the dragon!");
         DragonHP = Mathf.RoundToInt(DragonHP);
 
 
-        DragonText.text = ("Dragon Health: " + (DragonHP + 1));
-        // IDK why but it rounds down so it loses a digit, I add one to compensate
+        DragonText.text = ("Dragon Health: " + (DragonHP)); 
 
         Invoke("DragonAttack", 3f);
-
-        // play dragondamaged animation
+        // adds delay for improved gamefeel. 
     }
 
     public void UseMagic ()
     {
+        DragonAnimator.SetBool("dragonDamaged", true);
 
-        if (unitMAG >= 10)
+        if (selectedUnit.MAG >= 100)
         {
-            unitMAG -= 10;
+            selectedUnit.MAG -= 100;
             DragonHP -= 100;
+
+            MAGMeter.SetMeter(selectedUnit.MAG/1000f); // sets the MAG meter again after using up Magic
 
             NarrateText.text = ("The player cast a spell, electrocuting the dragon!");
             DragonHP = Mathf.RoundToInt(DragonHP);
 
-            DragonText.text = ("Dragon Health: " + (DragonHP + 1));
+            DragonText.text = ("Dragon Health: " + (DragonHP)); 
         }
         else
         {
             NarrateText.text = ("The player tried to cast a spell, but didn't have enough mana!");
         }
 
+        DragonAnimator.SetBool("dragonDamaged", true);
 
-    Invoke("DragonAttack", 3f);
 
-    //play dragondamaged animation 
+        Invoke("DragonAttack", 3f);
+
     }
 
     public void DragonAttack ()
     {
-        if (DragonHP <= 0)
+        DragonAnimator.SetBool("dragonDamaged", false);
+
+        UnitAnimator.SetBool("damaged", true);
+
+        if (DragonHP <= 0) // I could do this for the player as well to create a proper lose condition
         {
             NarrateText.text = ("Player slew the dragon! Congratulations!");
-            DragonText.text = ("Dragon: Dead");
+            DragonText.text = ("Dragon: Dead"); // gives the player a win condition
         }
         else
         {
-            unitHP -= 5;
-
+            if (selectedUnit.DEF != 0) // can't divide by zero. 
+            {
+                unitHP -= (15 - (selectedUnit.DEF / 100)); // wanted a range between 15 and 5, uses playerunit's attack
+            }
+            else
+            {
+                unitHP -= 15;
+            }
             HPText.text = ("HP: " + (unitHP));
             NarrateText.text = ("The dragon fought back, burning the player with its firey breath!");
 
-            //play playerdamaged animation
         }
+        Invoke("NotDamaged", 1f); // delaying the playerdamaged animation turning off. 
+    }
+
+    public void NotDamaged() // created so that I could delay the playerdamaged animation turning off. 
+    {
+        UnitAnimator.SetBool("damaged", false);
     }
 }

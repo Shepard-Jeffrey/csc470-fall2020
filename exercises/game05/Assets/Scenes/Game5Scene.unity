@@ -631,10 +631,9 @@ MonoBehaviour:
   MagicButton: {fileID: 220699359}
   Timer: 30
   unitHP: 100
-  unitATK: 75
-  unitDEF: 50
-  unitMAG: 25
   DragonHP: 1000
+  UnitAnimator: {fileID: 1974541055}
+  DragonAnimator: {fileID: 347517780}
 --- !u!4 &264540635
 Transform:
   m_ObjectHideFlags: 0
@@ -2760,25 +2759,6 @@ CharacterController:
     type: 3}
   m_PrefabInstance: {fileID: 6031497431189078769}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1979263949
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1979263946}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1990779791
 GameObject:
   m_ObjectHideFlags: 0
@@ -3090,12 +3070,12 @@ PrefabInstance:
     - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
       propertyPath: selectedColor.r
-      value: 0
+      value: 0.96692085
       objectReference: {fileID: 0}
     - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
       propertyPath: selectedColor.g
-      value: 0.16215563
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
@@ -3145,17 +3125,17 @@ PrefabInstance:
     - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
       propertyPath: MAG
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
       propertyPath: DEF
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
       propertyPath: ATK
-      value: 50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
@@ -3167,6 +3147,31 @@ PrefabInstance:
       propertyPath: updateMeter
       value: 
       objectReference: {fileID: 1158946572}
+    - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1974541055}
+    - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
+        type: 3}
+      propertyPath: unitanimator
+      value: 
+      objectReference: {fileID: 1974541055}
+    - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
+        type: 3}
+      propertyPath: ATKMineAnimator
+      value: 
+      objectReference: {fileID: 2071102511}
+    - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
+        type: 3}
+      propertyPath: DEFMineAnimator
+      value: 
+      objectReference: {fileID: 181547110}
+    - target: {fileID: 6031497431908001639, guid: 6c4cbd044ce759447848ad7242ee0273,
+        type: 3}
+      propertyPath: MAGMineAnimator
+      value: 
+      objectReference: {fileID: 1963499873}
     - target: {fileID: 6070455959089823881, guid: 6c4cbd044ce759447848ad7242ee0273,
         type: 3}
       propertyPath: m_LocalPosition.x

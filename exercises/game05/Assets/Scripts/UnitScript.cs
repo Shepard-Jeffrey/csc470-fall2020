@@ -17,7 +17,12 @@ public class UnitScript : MonoBehaviour
 	public MeterScript MAGMeter;
 	public MeterScript updateMeter;
 
-	Animator anim;
+	public bool DragonFightStarted = false;
+
+	public Animator unitanimator;
+	public Animator ATKMineAnimator;
+	public Animator DEFMineAnimator;
+	public Animator MAGMineAnimator;
 
 	// When the unit is selected, and the player clicks on the ground, it will instantiate a cube and add it to this
 	// list. When the player presses the "Go!" button, the unit will start moving toward the first cube. When it
@@ -25,15 +30,15 @@ public class UnitScript : MonoBehaviour
 	// and the path will be reset (and all the cubes will be destroyed).
 	List<GameObject> path;
 	int pathIndex = 0;
-	bool moving = false;
-
+/*	bool moving = false;
+*/
 	// How fast the Unit will move forward.
 	float speed = 5f;
 	// How fast the Unit will rotate toward its targetPosition.
 	float rotateSpeed = 4f;
 	
 	// Units will always rotate toward this position unless they are already close to it.
-	Vector3 targetPosition;
+	public Vector3 targetPosition;
 
 	// These two booleans are used to track the state based on the mouse (see the mouse functions below).
 	public bool selected = false;
@@ -52,7 +57,6 @@ public class UnitScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		anim = gameObject.GetComponent<Animator>();
 
 		// Set the color of the rendere's material based on the mouse state variables.
 		UpdateVisuals();
@@ -74,67 +78,98 @@ public class UnitScript : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (selected) {
-			// Input.GetMouseButtonDown(0) is how you detect that the left mouse button has been clicked.
-			//
-			// The IsPointerOverGameObject makes sure the pointer is over the UI. In this case,
-			// we don't want to register clicks over the UI when determining what unit is 
-			// selected or deselected.
-			if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
-				// We will get in here if the Unit is selected, and the player has clicked the mouse.
-				
-				// The following code create's a "ray" at the position that the mouse is on the screen, and performs
-				// a Raycast. This is a Physics utility function that will move in a direction and populate the 
-				// values of a RaycastHit object if something was hit. If the Raycast doesn't hit anything (i.e. the
-				// player clicks into the nothingness - where there are no GameObjects), the Physics.Raycast
-				// returns null, and thus we will not go in the if statement's body.
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit hit;
-				if (Physics.Raycast(ray, out hit)) {
-					// If we get in here, it means that the mouse was "over" a GameObject when the player clicked.
-					// Check to see if what we clicked on the the "Ground" via this layer check.
-					if (hit.collider.gameObject.layer == LayerMask.NameToLayer("MinePlane")) {
-						// // If we get in here, the raycast has hit the ground. 
-						
-						// // Spawn a cube, and store it in a list. These will be the "waypoints" that the unit will walk toward
-						// // when the player clicks the "Go!" button.
-						// GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-						// // Remove the default box collider that gets added when we use CreatePrimitive.
-						// Destroy(obj.GetComponent<BoxCollider>()); 
-						// obj.transform.position = hit.point;
-						// path.Add(obj);
+		if (DragonFightStarted == false)
+		{
+			if (selected)
+			{
+				// Input.GetMouseButtonDown(0) is how you detect that the left mouse button has been clicked.
+				//
+				// The IsPointerOverGameObject makes sure the pointer is over the UI. In this case,
+				// we don't want to register clicks over the UI when determining what unit is 
+				// selected or deselected.
+				if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+				{
+					// We will get in here if the Unit is selected, and the player has clicked the mouse.
 
-						targetPosition = hit.point;
+					// The following code create's a "ray" at the position that the mouse is on the screen, and performs
+					// a Raycast. This is a Physics utility function that will move in a direction and populate the 
+					// values of a RaycastHit object if something was hit. If the Raycast doesn't hit anything (i.e. the
+					// player clicks into the nothingness - where there are no GameObjects), the Physics.Raycast
+					// returns null, and thus we will not go in the if statement's body.
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit hit;
+					if (Physics.Raycast(ray, out hit))
+					{
+						// If we get in here, it means that the mouse was "over" a GameObject when the player clicked.
+						// Check to see if what we clicked on the the "Ground" via this layer check.
+						if (hit.collider.gameObject.layer == LayerMask.NameToLayer("MinePlane"))
+						{
+							// // If we get in here, the raycast has hit the ground. 
 
+							// // Spawn a cube, and store it in a list. These will be the "waypoints" that the unit will walk toward
+							// // when the player clicks the "Go!" button.
+							// GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+							// // Remove the default box collider that gets added when we use CreatePrimitive.
+							// Destroy(obj.GetComponent<BoxCollider>()); 
+							// obj.transform.position = hit.point;
+							// path.Add(obj);
+
+							targetPosition = hit.point;
+
+						}
+						if (hit.collider.gameObject.layer == LayerMask.NameToLayer("AttackMine"))
+						{
+							ATK += 1;
+
+							//UpdateMeter(ATK);
+							ATKMeter.SetMeter(ATK / 1000f); 
+							// setting these to 1000 instead of 100 fixed the meters going up too fast. 
+							// but it also caused the meters to be kinda screwy.
+							// I'd rather set ATK/DEF/MAG to go up by 0.1, but they're ints and making them floats or doubles messed up a LOT of code elsewhere somehow. 
+
+							//Start the ATKMine animation
+							ATKMineAnimator.SetBool("ATKmining", true);
+						}
+						else
+                        {
+							ATKMineAnimator.SetBool("ATKmining", false);
+						}
+						if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DefenseMine"))
+						{
+							DEF += 1;
+
+							DEFMineAnimator.SetBool("DEFmining", true);
+							//Start the DEFMine animation
+
+							DEFMeter.SetMeter(DEF / 1000f);
+
+						}
+						else
+                        {
+							DEFMineAnimator.SetBool("DEFmining", false);
+						}
+						if (hit.collider.gameObject.layer == LayerMask.NameToLayer("MagicMine"))
+						{
+							MAG += 1;
+
+							MAGMineAnimator.SetBool("MAGmining", true);
+							//Start the MAGMine animation
+
+							MAGMeter.SetMeter(MAG / 1000f);
+
+						}
+						else
+                        {
+							MAGMineAnimator.SetBool("MAGmining", false);
+						}
 					}
-					if (hit.collider.gameObject.layer == LayerMask.NameToLayer("AttackMine")) {
-						ATK += 1;
-						Debug.Log("test");
-						//UpdateMeter(ATK);
-						//Start the ATKMine animation
-						anim.SetBool("ATKmining", true);
-
+					else
+					{
+						gm.SelectUnit(null);
 					}
-					if (hit.collider.gameObject.layer == LayerMask.NameToLayer("DefenseMine")) {
-						DEF += 1;
-
-						//Start the DEFMine animation
-					}
-					if (hit.collider.gameObject.layer == LayerMask.NameToLayer("MagicMine")) {
-						MAG += 1;
-
-						//Start the MAGMine animation
-					}
-				} else {
-					gm.SelectUnit(null);
-					anim.SetBool("ATKmining", false);
-					anim.SetBool("DEFmining", false);
-					anim.SetBool("MAGmining", false);
-
 				}
 			}
 		}
-
 		// MOVEMENT
 		// If we are not close to our target position, rotate toward the targetPosition, and move forward.
 		if (Vector3.Distance(transform.position, targetPosition) > 0.5f) {
@@ -148,13 +183,14 @@ public class UnitScript : MonoBehaviour
 			
 			cc.Move(transform.forward * speed * Time.deltaTime);
 
-			//anim.SetBool("walking", true);
+			unitanimator.SetBool("walking", true);
 
 			// set walking true
 
 		}
 		else {
-			if (moving && path.Count > 0) {
+			unitanimator.SetBool("walking", false);
+		/*	if (moving && path.Count > 0) {
 				// If we get in here, we ARE close to our target position.
 				pathIndex++;
 				if (pathIndex == path.Count) {
@@ -165,13 +201,12 @@ public class UnitScript : MonoBehaviour
 					}
 					path = new List<GameObject>();
 					moving = false;
-					anim.SetBool("walking", false);
 					// set walking false
 				} else {
 					// Finally, if we get in here, we are going to set our target position to the location of the path marker.
 					targetPosition = path[pathIndex].transform.position;
 				}
-			}
+			}*/
 		}
 	}
 
@@ -187,8 +222,8 @@ public class UnitScript : MonoBehaviour
 		pathIndex = 0;
 		if (path.Count > 0) {
 			targetPosition = path[pathIndex].transform.position;
-			moving = true;
-			//anim.SetBool("walking", true);
+/*			moving = true;
+*/			//anim.SetBool("walking", true);
 		}
 	}
 
@@ -196,14 +231,27 @@ public class UnitScript : MonoBehaviour
 	// the hover, or selection bools are modified.
 	public void UpdateVisuals()
 	{
-		if (selected) {
-			rend.material.color = selectedColor;
-		} else {
-			if (hover) {
-				rend.material.color = hoverColor;
-			} else {
-				rend.material.color = defaultColor;
+		if (DragonFightStarted == false)
+		{
+			if (selected)
+			{
+				rend.material.color = selectedColor;
 			}
+			else
+			{
+				if (hover)
+				{
+					rend.material.color = hoverColor;
+				}
+				else
+				{
+					rend.material.color = defaultColor;
+				}
+			}
+		}
+		else
+		{
+			rend.material.color = defaultColor;
 		}
 	}
 

@@ -1,7 +1,7 @@
 # Game Plan:
 
 Gameplay Description:
-An improved version of the base game 5 I did. Instead of mining, the players gets to choose how to distribute their points, and chooses from a pool of spells that do different things. they get to pick, say, 3 spells from a pool of 10 that each have its own animation and gameplay effect. Mana and health will be refreshed between battles. If they lose all their health, they will be given the option of restarting the battle or going back to the title screen. When they finish all their battles, they obtain the treasure, win the game, and are sent back to the title screen. 
+An improved version of the base game 5 I did. Instead of mining, the players gets to choose how to distribute their points, and chooses from a pool of spells that do different things. they get to pick, say, 3 spells from a pool of 10 that each have its own animation and gameplay effect. Mana and health will be refreshed between battles. If they lose all their health, they will be given the option of restarting the battle or going back to the title screen. When they finish all their battles, they obtain the treasure, win the game, and are sent back to the title screen. Battles entail player and unit HP bars, and the player and enemy taking turns making moves. The player will have the option of selection to use a basic attack, or use one of multiple spells, which will also use up some of the mana they took at the start. 
 
 Input:
 Player interacts with sliders for their stat values, and buttons to choose attacks and make choices. 
@@ -17,6 +17,12 @@ Not sure how to sketch an interface here. Buttons for attacks displayed at the b
 
 Story/Theme Description:
 Player is taking a quest to go into a dungeon to find the treasure, and must "train for their adventure" (choose how their stats are distributed based on this). They come upon different monsters and must bravely fight them in order to reach the end. 
+
+Technical Challenges:
+Good-looking animations for each spell.
+health and/or turn-dependent enemy attacks
+Creating a stat-slider
+Implementing story themes into gameplay. 
 
 # Low-Bar:
 Basic combat, UI, audio, and visuals all function properly.

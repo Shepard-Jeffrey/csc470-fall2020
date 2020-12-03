@@ -15,11 +15,12 @@ public class GameManager : MonoBehaviour
 	float PlayerDEF = 25;
 	float EnemyHP = 1000;
 	// default values
+	float FadeRate = 0.5f;
 
 	int Enemy = 1; // This is to keep track of which enemy the player faces for coding purposes. 
 	int Button1 = 2;
 	int Button2 = 3;
-	int Button3 = 8;
+	int Button3 = 6;
 	// The above are so that each button can keep track of it's value. 
 
 	string PlayerName = "Jeffrey"; // Default Value, should be set in CustomScreen by Player
@@ -34,6 +35,8 @@ public class GameManager : MonoBehaviour
 	public Text EnemyNameText;
 	public Text EnemyHPNum;
 
+	public InputField NameField;
+
 	public MeterScript HPMeter;
 	public MeterScript MPMeter;
 	public MeterScript EnemyHPMeter;
@@ -41,6 +44,8 @@ public class GameManager : MonoBehaviour
 	public bool Lost = false;
 
 	public int test = 3;
+
+	public Image FadeBlack;
 
 
 	public void Test()
@@ -59,7 +64,7 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			instance = this;
-			DontDestroyOnLoad(this.gameObject);
+			//DontDestroyOnLoad(this.gameObject);
 		}
 
 	}
@@ -76,6 +81,7 @@ public class GameManager : MonoBehaviour
 		NameText.text = (PlayerName);
 		EnemyNameText.text = (EnemyName);
 		UpdateUI();
+	/*	StartCoroutine();*/
 	}
 
 	// Update is called once per frame
@@ -238,7 +244,8 @@ public class GameManager : MonoBehaviour
 		EnemyHPMeter.SetMeter(EnemyHP / 1000f);
 		ATKText.text = ("ATK: " + (PlayerATK));
 		DEFText.text = ("DEF: " + (PlayerDEF));
-
+		NameText.text = PlayerName;
+		
 		HPNum.text = ("" + PlayerHP); // it didn't like me just using a float
 		MPNum.text = ("" + PlayerMP);
 		EnemyHPNum.text = ("" + EnemyHP);
@@ -335,7 +342,7 @@ public class GameManager : MonoBehaviour
 
 	public void LifeForceBomb()
 	{
-		PlayerHP -= 100;
+		PlayerHP -= 10;
 		EnemyHP -= 300;
 		NarrateText.text = ("The player uses their own life force in place of mana to attack their opponent");
 		ChooseEnemyAction();
@@ -407,9 +414,10 @@ public class GameManager : MonoBehaviour
 		EnemyHPNum.text = "0";
 		UpdateUI();
 		NarrateText.text = ("The player defeats their enemy after a hard-fought battle! The player rests for awhile, regaining their strengh, but is attacked by a new enemy!");
-		// invoke fading to black here
+		Invoke("FadeToBlack", 3f);
 		Enemy++;
 		RestoreDefaults();
+		Invoke("UnFade", 3f);
 	}
 
 	public void BattleLost()
@@ -441,4 +449,35 @@ public class GameManager : MonoBehaviour
 	public void OutOfMana() {
 		NarrateText.text = ("You don't have enough mana to use this spell. Choose a different action.");
 	}
+
+	public void FadeToBlack() {
+		while (FadeBlack.color.a <= 255)
+		{
+			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate * Time.deltaTime);
+		}
+    }
+
+	public void UnFade()
+    {
+		while (FadeBlack.color.a >= 0)
+        {
+			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a - FadeRate * Time.deltaTime);
+
+		}
+	}
+
+	public void UserName()
+    {
+		PlayerName = NameField.text;
+		UpdateUI();
+	}
+
+	/*	IEnumerator Fade()
+		{
+			while (FadeBlack.color.a >= 0)
+			{
+				FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate * Time.deltaTime);
+				yield return null;
+			}
+		}*/
 }

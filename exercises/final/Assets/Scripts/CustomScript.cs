@@ -300,7 +300,7 @@ public class CustomScript : MonoBehaviour
 
     private void Awake()
     {
-        // The Singleton pattern.
+     /*   // The Singleton pattern.
         if (instance != null && instance != this)
         {
             // Enforce that there is only one GameManager.
@@ -311,7 +311,7 @@ public class CustomScript : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-
+*/
     }
 
     // Start is called before the first frame update

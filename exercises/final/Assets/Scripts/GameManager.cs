@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
 
 	int Enemy = 1; // This is to keep track of which enemy the player faces for coding purposes. 
 	int Button1 = 1;
-	int Button2 = 2;
-	int Button3 = 3;
+	int Button2 = 5;
+	int Button3 = 6;
 	// The above are so that each button can keep track of it's value. 
 
 	public string PlayerName = "Jeffrey"; // Default Value, should be set in CustomScreen by Player
@@ -51,7 +51,17 @@ public class GameManager : MonoBehaviour
 	public ParticleSystem LightningEffect;
 	public ParticleSystem HealEffect;
 	public ParticleSystem BasicAttackEffect;
+	public ParticleSystem MagicMissileEffect;
+	public ParticleSystem LifeDrainEffect;
+	public ParticleSystem LifeBombEffect;
+	public ParticleSystem ReinforceEffect;
+	public ParticleSystem BolsterEffect;
+	public ParticleSystem ExplosionEffect;
+	public ParticleSystem SpliceEffect;
+	public ParticleSystem FireBreathEffect;
 
+	public GameObject Dragon;
+	public GameObject Slime;
 
 
 	private void Awake()
@@ -73,7 +83,6 @@ public class GameManager : MonoBehaviour
 	public void ReturnToTitle()
 	{
 		SceneManager.LoadScene("TitleScreen");
-
 	}
 
 	// Start is called before the first frame update
@@ -82,7 +91,9 @@ public class GameManager : MonoBehaviour
 
 		NameText.text = (PlayerName);
 		EnemyNameText.text = (EnemyName);
-
+		Vector3 newPosition = Dragon.transform.position;
+		newPosition.x = -51;
+		Dragon.transform.position = newPosition;
 		UpdateUI();
 	/*	StartCoroutine();*/
 	}
@@ -332,6 +343,7 @@ public class GameManager : MonoBehaviour
 			PlayerMP -= 5;
 			EnemyHP -= 50;
 			NarrateText.text = ("The player sends a missile of energy at the " + EnemyName + ", forcing it back.");
+			MagicMissileEffect.Play();
 			ChooseEnemyAction();
 		}
 	}
@@ -348,6 +360,7 @@ public class GameManager : MonoBehaviour
 			EnemyHP -= 50;
 			PlayerHP += 50;
 			NarrateText.text = ("The player steals life energy from their foe, reinforcing their own life force.");
+			LifeDrainEffect.Play();
 			ChooseEnemyAction();
 		}
 	}
@@ -357,6 +370,7 @@ public class GameManager : MonoBehaviour
 		PlayerHP -= 10;
 		EnemyHP -= 300;
 		NarrateText.text = ("The player uses their own life force in place of mana to attack their opponent");
+		LifeBombEffect.Play();
 		ChooseEnemyAction();
 	}
 
@@ -371,6 +385,7 @@ public class GameManager : MonoBehaviour
 			PlayerDEF += 10;
 			PlayerMP -= 10;
 			NarrateText.text = ("The player reinforces their body with magic, enabling them to withstand more hits");
+			ReinforceEffect.Play();
 			ChooseEnemyAction();
 		}
 	}
@@ -386,6 +401,7 @@ public class GameManager : MonoBehaviour
 			PlayerATK += 10;
 			PlayerMP -= 10;
 			NarrateText.text = ("The player strengthens their basic magic attacks, enabling them to do more damage without using mana");
+			BolsterEffect.Play();
 			ChooseEnemyAction();
 		}
 	}
@@ -398,10 +414,11 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			EnemyHP -= ((PlayerMP * 5) + (PlayerHP * 5));
+			EnemyHP -= ((PlayerMP * 4) + (PlayerHP * 5));
 			PlayerMP = 0;
 			PlayerHP = 1;
 			NarrateText.text = ("The player uses every last ounce of their magical and physical energy in an all-out attack against their enemy");
+			ExplosionEffect.Play();
 			ChooseEnemyAction();
 		}
 	}
@@ -411,14 +428,26 @@ public class GameManager : MonoBehaviour
 		EnemyHP = (EnemyHP / 2);
 		PlayerMP = (PlayerMP / 2);
 		NarrateText.text = ("The player cuts the " + EnemyName + "'s HP in half, using half of their own mana");
+		SpliceEffect.Play();
 		ChooseEnemyAction();
 	}
 
 	public void SlimeAttack()
 	{
-		NarrateText.text = ("The Slime fires aciding goop at the player, burning them.");
-		SlimeEffect.Play();
-		PlayerHP -= 5 / (PlayerDEF / 10);
+		if (Enemy == 1) // this is only here to prevent the enemy from making one last attack after dying.
+		{
+			NarrateText.text = ("The Slime fires aciding goop at the player, burning them.");
+			SlimeEffect.Play();
+			PlayerHP -= 5 / (PlayerDEF / 10);
+			UpdateUI();
+		}
+	}
+
+	public void DragonAttack()
+    {
+		NarrateText.text = ("The Salamander breathes fire at the player, burning them.");
+		FireBreathEffect.Play();
+		PlayerHP -= 20 / (PlayerDEF / 10);
 		UpdateUI();
 	}
 
@@ -437,10 +466,8 @@ public class GameManager : MonoBehaviour
 		if (FadeBlack.color.a >= 1.3) {
 			RestoreDefaults();
 			NeedsToFade = false;
-			if (Enemy == 1)
-			{
-				NarrateText.text = ("A New Enemy Appears!");
-			}
+			Enemy++;
+			UpdateEnemy();
 		}
 		StartCoroutine(UnFade());
 		
@@ -458,8 +485,8 @@ public class GameManager : MonoBehaviour
 	{
 		PlayerHP = 100;
 		PlayerMP = 100;
-		PlayerATK = 50;
-		PlayerDEF = 1;
+		PlayerATK = 10;
+		PlayerDEF = 10;
 		EnemyHP = 1000;
 		UpdateUI();
 	}
@@ -470,29 +497,55 @@ public class GameManager : MonoBehaviour
 		{
 			Invoke("SlimeAttack", 3f);
 		}
+		if (Enemy == 2)
+        {
+			Invoke("DragonAttack", 3f);
+		}
 	}
 
 	public void OutOfMana() {
 		NarrateText.text = ("You don't have enough mana to use this spell. Choose a different action.");
 	}
 
-/*	public void FadeToBlack() {
-		while (FadeBlack.color.a <= 255)
-		{
-			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate); // FadeRate * Time.deltaTime
-		}
-    }*/
-/*
-	public void UnFade()
+	public void Victory()
     {
-		while (FadeBlack.color.a >= 0)
-        {
-			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a - FadeRate * Time.deltaTime);
-				Invoke("FadeToBlack", 1f);
-		}
-	}*/
+		SceneManager.LoadScene("VictoryScreen");
+	}
 
-    IEnumerator Fade()
+	public void UpdateEnemy()
+    {
+		if (Enemy == 2)
+        {
+			Destroy(Slime);
+			Vector3 newPosition = Dragon.transform.position;
+			newPosition.x = -1;
+			Dragon.transform.position = newPosition;
+			EnemyName = "Dragon";
+			EnemyNameText.text = "Dragon";
+			NarrateText.text = "A Red Dragon appears to guard its treasure! Kill it to claim your reward!";
+		}
+		if (Enemy == 3) {
+			Victory();
+        }
+    }
+
+	/*	public void FadeToBlack() {
+			while (FadeBlack.color.a <= 255)
+			{
+				FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate); // FadeRate * Time.deltaTime
+			}
+		}*/
+	/*
+		public void UnFade()
+		{
+			while (FadeBlack.color.a >= 0)
+			{
+				FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a - FadeRate * Time.deltaTime);
+					Invoke("FadeToBlack", 1f);
+			}
+		}*/
+
+	IEnumerator Fade()
     {
         while (FadeBlack.color.a <= 255 && NeedsToFade == true)
         {

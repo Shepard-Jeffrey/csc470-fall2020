@@ -13,8 +13,7 @@ public class TitleScript : MonoBehaviour
 
     public void Continue()
     {
-        SceneManager.LoadScene("Fight1Screen");
-
+        SceneManager.LoadScene("CustomScreen");
     }
 
     // Update is called once per frame

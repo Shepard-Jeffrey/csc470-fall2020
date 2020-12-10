@@ -256,7 +256,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Select Your Stats, Spells, and run the Gauntlet in search of the treasure!
+  m_Text: Select Your Spells and run the Gauntlet in search of the treasure!
 --- !u!222 &267844305
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -863,7 +863,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Basic RPG
+  m_Text: Dungeon RPG
 --- !u!222 &2107849977
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/CustomScreen.unity
     guid: b2a12b2826bad674982cac0ca84ee242
   - enabled: 1
-    path: Assets/Scenes/Fight1Screen.unity
+    path: Assets/Scenes/FightScreen.unity
     guid: 275fc1690a101ae44923c862a21af93e
   m_configObjects: {}

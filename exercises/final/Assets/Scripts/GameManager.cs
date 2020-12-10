@@ -11,19 +11,20 @@ public class GameManager : MonoBehaviour
 	// This was made a lot easier by setting and manipulating player & enemy stats entirely in game manager, rather than having to worry about enemy scripts
 	float PlayerHP = 100;
 	float PlayerMP = 100;
-	float PlayerATK = 50;
-	float PlayerDEF = 25;
+	float PlayerATK = 10;
+	float PlayerDEF = 10;
 	float EnemyHP = 1000;
 	// default values
-	float FadeRate = 0.5f;
+	float FadeRate = 0.001f; // for some reason this needed to be set extremely low for one, and high for the other, ended up being wonky in general
+	bool NeedsToFade = false; // this is to control whether fade or unfade runs. 
 
 	int Enemy = 1; // This is to keep track of which enemy the player faces for coding purposes. 
-	int Button1 = 2;
-	int Button2 = 3;
-	int Button3 = 6;
+	int Button1 = 1;
+	int Button2 = 2;
+	int Button3 = 3;
 	// The above are so that each button can keep track of it's value. 
 
-	string PlayerName = "Jeffrey"; // Default Value, should be set in CustomScreen by Player
+	public string PlayerName = "Jeffrey"; // Default Value, should be set in CustomScreen by Player
 	string EnemyName = "Slime"; // Default Value, will be changed after each fight
 
 	public Text NarrateText;
@@ -43,15 +44,15 @@ public class GameManager : MonoBehaviour
 
 	public bool Lost = false;
 
-	public int test = 3;
-
 	public Image FadeBlack;
 
+	public ParticleSystem FireBallEffect;
+	public ParticleSystem SlimeEffect;
+	public ParticleSystem LightningEffect;
+	public ParticleSystem HealEffect;
+	public ParticleSystem BasicAttackEffect;
 
-	public void Test()
-	{
-		test++;
-	}
+
 
 	private void Awake()
 	{
@@ -78,8 +79,10 @@ public class GameManager : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+
 		NameText.text = (PlayerName);
 		EnemyNameText.text = (EnemyName);
+
 		UpdateUI();
 	/*	StartCoroutine();*/
 	}
@@ -90,15 +93,13 @@ public class GameManager : MonoBehaviour
 		if (EnemyHP < 1) // general check for if the boss has been defeated. 
 		{
 			BattleWon();
-			if (Enemy == 1) {
-
-			}
 		}
 		if (PlayerHP < 1) // general check for if the player has lost
 		{
 			BattleLost();
 		}
 
+		//PlayerName = NameField.text;
 
 	}
 
@@ -126,7 +127,7 @@ public class GameManager : MonoBehaviour
 				MagicMissile();
 				break;
 			case 5:
-				LifeSapper();
+				LifeDrain();
 				break;
 			case 6:
 				LifeForceBomb();
@@ -169,7 +170,7 @@ public class GameManager : MonoBehaviour
 				MagicMissile();
 				break;
 			case 5:
-				LifeSapper();
+				LifeDrain();
 				break;
 			case 6:
 				LifeForceBomb();
@@ -212,7 +213,7 @@ public class GameManager : MonoBehaviour
 				MagicMissile();
 				break;
 			case 5:
-				LifeSapper();
+				LifeDrain();
 				break;
 			case 6:
 				LifeForceBomb();
@@ -248,8 +249,15 @@ public class GameManager : MonoBehaviour
 		
 		HPNum.text = ("" + PlayerHP); // it didn't like me just using a float
 		MPNum.text = ("" + PlayerMP);
-		EnemyHPNum.text = ("" + EnemyHP);
-	}
+		if (EnemyHP > 0)
+		{
+			EnemyHPNum.text = ("" + EnemyHP);
+		}
+		else
+        {
+			EnemyHPNum.text = ("Dead");
+        }
+		}
 
 	public void BasicAttack()
 	{
@@ -258,8 +266,9 @@ public class GameManager : MonoBehaviour
 			RestoreDefaults();
 			Lost = false;
 		}
-		EnemyHP -= 1 * (PlayerATK); // factors in player unit's attack for the damage
+		EnemyHP -= 5 * (PlayerATK); // factors in player unit's attack for the damage
 		NarrateText.text = ("The player hit the " + EnemyName + " with basic magic, causing it to recoil.");
+		BasicAttackEffect.Play();
 		UpdateUI();
 		ChooseEnemyAction();
 	}
@@ -272,9 +281,10 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
+			NarrateText.text = ("The player launches a Fireball at the " + EnemyName + ", scorching its flesh.");
+			FireBallEffect.Play();
 			PlayerMP -= 15;
 			EnemyHP -= 100;
-			NarrateText.text = ("The player launches a Fireball at the " + EnemyName + ", scorching its flesh.");
 			ChooseEnemyAction();
 		}
 	}
@@ -290,6 +300,7 @@ public class GameManager : MonoBehaviour
 			PlayerMP -= 15;
 			PlayerHP += 10;
 			NarrateText.text = ("The player heals themselves, erasing grievous wounds.");
+			HealEffect.Play();
 			ChooseEnemyAction();
 		}
 	}
@@ -302,9 +313,10 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
+			NarrateText.text = ("The player sends bolts of lightning at the " + EnemyName + ", electrocuting it.");
+			LightningEffect.Play();
 			PlayerMP -= 40;
 			EnemyHP -= 200;
-			NarrateText.text = ("The player sends a bolt of lightning at the " + EnemyName + " electrocuting it.");
 			ChooseEnemyAction();
 		}
 	}
@@ -324,7 +336,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void LifeSapper()
+	public void LifeDrain()
 	{
 		if (PlayerMP < 10)
 		{
@@ -356,7 +368,7 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			PlayerDEF += 20;
+			PlayerDEF += 10;
 			PlayerMP -= 10;
 			NarrateText.text = ("The player reinforces their body with magic, enabling them to withstand more hits");
 			ChooseEnemyAction();
@@ -371,7 +383,7 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			PlayerATK += 20;
+			PlayerATK += 10;
 			PlayerMP -= 10;
 			NarrateText.text = ("The player strengthens their basic magic attacks, enabling them to do more damage without using mana");
 			ChooseEnemyAction();
@@ -404,20 +416,34 @@ public class GameManager : MonoBehaviour
 
 	public void SlimeAttack()
 	{
-		PlayerHP -= 5;
 		NarrateText.text = ("The Slime fires aciding goop at the player, burning them.");
+		SlimeEffect.Play();
+		PlayerHP -= 5 / (PlayerDEF / 10);
 		UpdateUI();
 	}
 
 	public void BattleWon()
 	{
-		EnemyHPNum.text = "0";
 		UpdateUI();
-		NarrateText.text = ("The player defeats their enemy after a hard-fought battle! The player rests for awhile, regaining their strengh, but is attacked by a new enemy!");
-		Invoke("FadeToBlack", 3f);
-		Enemy++;
-		RestoreDefaults();
-		Invoke("UnFade", 3f);
+		if (EnemyHPNum.text == "Dead") {
+			NarrateText.text = ("The player defeats their enemy after a hard-fought battle! The player rests for awhile, regaining their strength...");
+		}
+
+		if (FadeBlack.color.a <= 0)
+        {
+			NeedsToFade = true;
+		}
+		StartCoroutine(Fade());
+		if (FadeBlack.color.a >= 1.3) {
+			RestoreDefaults();
+			NeedsToFade = false;
+			if (Enemy == 1)
+			{
+				NarrateText.text = ("A New Enemy Appears!");
+			}
+		}
+		StartCoroutine(UnFade());
+		
 	}
 
 	public void BattleLost()
@@ -433,7 +459,7 @@ public class GameManager : MonoBehaviour
 		PlayerHP = 100;
 		PlayerMP = 100;
 		PlayerATK = 50;
-		PlayerDEF = 25;
+		PlayerDEF = 1;
 		EnemyHP = 1000;
 		UpdateUI();
 	}
@@ -450,34 +476,40 @@ public class GameManager : MonoBehaviour
 		NarrateText.text = ("You don't have enough mana to use this spell. Choose a different action.");
 	}
 
-	public void FadeToBlack() {
+/*	public void FadeToBlack() {
 		while (FadeBlack.color.a <= 255)
 		{
-			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate * Time.deltaTime);
+			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate); // FadeRate * Time.deltaTime
 		}
-    }
-
+    }*/
+/*
 	public void UnFade()
     {
 		while (FadeBlack.color.a >= 0)
         {
 			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a - FadeRate * Time.deltaTime);
-
+				Invoke("FadeToBlack", 1f);
 		}
-	}
+	}*/
 
-	public void UserName()
+    IEnumerator Fade()
     {
-		PlayerName = NameField.text;
-		UpdateUI();
-	}
+        while (FadeBlack.color.a <= 255 && NeedsToFade == true)
+        {
+            FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate * Time.deltaTime);
+			//Debug.Log(FadeBlack.color.a); test to see what was going wrong
+			yield return null;
+        }
+    }
 
-	/*	IEnumerator Fade()
+	IEnumerator UnFade()
+	{
+		while (FadeBlack.color.a >= 0 && NeedsToFade == false)
 		{
-			while (FadeBlack.color.a >= 0)
-			{
-				FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a + FadeRate * Time.deltaTime);
-				yield return null;
-			}
-		}*/
+			FadeBlack.color = new Color(FadeBlack.color.r, FadeBlack.color.g, FadeBlack.color.b, FadeBlack.color.a - FadeRate * 500 * Time.deltaTime);
+			//Debug.Log(FadeBlack.color.a); test to see what was going wrong
+			yield return null;
+		}
+		
+	}
 }

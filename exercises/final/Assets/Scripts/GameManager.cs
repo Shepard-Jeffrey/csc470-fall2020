@@ -444,7 +444,7 @@ public class GameManager : MonoBehaviour
 
 	public void SlimeAttack()
 	{
-		if (Enemy == 1) // this is only here to prevent the enemy from making one last attack after dying.
+		if (Enemy == 1 && EnemyHP > 1) // this is only here to prevent the enemy from making one last attack after dying.
 		{
 			NarrateText.text = ("The Slime fires aciding goop at the player, burning them.");
 			SlimeEffect.Play();
@@ -455,10 +455,13 @@ public class GameManager : MonoBehaviour
 
 	public void DragonAttack()
     {
-		NarrateText.text = ("The Salamander breathes fire at the player, burning them.");
-		FireBreathEffect.Play();
-		PlayerHP -= 10 / (PlayerDEF / 10);
-		UpdateUI();
+		if (Enemy == 2 && EnemyHP > 1) // this is only here to prevent the enemy from making one last attack after dying.
+		{
+			NarrateText.text = ("The Salamander breathes fire at the player, burning them.");
+			FireBreathEffect.Play();
+			PlayerHP -= 10 / (PlayerDEF / 10);
+			UpdateUI();
+		}
 	}
 
 	public void BattleWon()

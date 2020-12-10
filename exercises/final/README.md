@@ -3,7 +3,7 @@
 Gameplay Description:
 Pick your spells from a larger set, and head off into the dungeon in search of treasure! But be careful, for many monsters crawl the dungeon floor. Fight your way through in turn-based combat, while managing your mana and health!
 
-Snapshots:
+# Snapshots:
 
 Title Screen:
 ![alt text](https://github.com/Shepard-Jeffrey/csc470-fall2020/raw/master/exercises/final/ScreenShots/TitleScreen.png "Title Screen")

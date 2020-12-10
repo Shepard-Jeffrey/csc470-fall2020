@@ -16,3 +16,5 @@ Slime Fight:
 
 Dragon Fight:
 ![alt text](https://github.com/Shepard-Jeffrey/csc470-fall2020/raw/master/exercises/final/ScreenShots/DragonFight.png "Dragon Fight")
+
+(None of the music is mine)

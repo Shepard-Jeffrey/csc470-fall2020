@@ -9,16 +9,15 @@ public class CustomScript : MonoBehaviour
     public static CustomScript instance;
 
     public InputField NameField;
-    public string PlayerName;
-    public Text NameHolder;
+    public string UserName;
     public Text InstructionText;
     public Text ExtraText;
 
     int SpellsChosen = 0; // This keeps track of how many total spells the player has chosen. 
 
-    int Spell1 = 0;
-    int Spell2 = 0;
-    int Spell3 = 0;
+    public int Spell1 = 0;
+    public int Spell2 = 0;
+    public int Spell3 = 0;
 
     public void Fireball()
     {
@@ -300,7 +299,7 @@ public class CustomScript : MonoBehaviour
 
     private void Awake()
     {
-     /*   // The Singleton pattern.
+        // The Singleton pattern.
         if (instance != null && instance != this)
         {
             // Enforce that there is only one GameManager.
@@ -311,49 +310,58 @@ public class CustomScript : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-*/
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerName = NameField.text;
-        NameHolder.text = NameField.text;
-
+        UserName = NameField.text;
         if (SpellsChosen == 0)
-        {
-            InstructionText.text = "Select Your First Spell";
-        }
-        if (SpellsChosen == 1)
-        {
-            InstructionText.text = "Select Your Second Spell";
-        }
-        if (SpellsChosen == 2)
-        {
-            InstructionText.text = "Select Your Third Spell";
-        }
-        if (SpellsChosen == 3)
-        {
-            InstructionText.text = "Great! You are now ready to start your adventure!";
-            ExtraText.text = "click the button to start";
-        }
+            {
+                InstructionText.text = "Select Your First Spell";
+            }
+            if (SpellsChosen == 1)
+            {
+                InstructionText.text = "Select Your Second Spell";
+            }
+            if (SpellsChosen == 2)
+            {
+                InstructionText.text = "Select Your Third Spell";
+            }
+            if (SpellsChosen == 3 && NameField.text != "")
+            {
+                InstructionText.text = "Great! You are now ready to start your adventure!";
+                ExtraText.text = "click the button to start";
+            }
+            if (SpellsChosen == 3 && NameField.text == "") // in case user enters spells but not their name
+             {
+                InstructionText.text = "Great! Now enter your name!";
+             }
     }
 
     public void Continue()
     {
-        if (Spell1 != 0 && Spell2 != 0 && Spell3 != 0)
+        if (Spell1 != 0 && Spell2 != 0 && Spell3 != 0 && NameField.text != "") // make sure it only advances if all spells are picked and a name is entered
         {
             SceneManager.LoadScene("FightScreen");
+        }
+        if (NameField.text == "")
+        {
+            ExtraText.text = "Not yet! You must enter your name!";
         }
         else
         {
             ExtraText.text = "Not yet! You must select your spells!";
         }
+        
     }
+
+  
 }

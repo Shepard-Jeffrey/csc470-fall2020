@@ -19,12 +19,12 @@ public class GameManager : MonoBehaviour
 	bool NeedsToFade = false; // this is to control whether fade or unfade runs. 
 
 	int Enemy = 1; // This is to keep track of which enemy the player faces for coding purposes. 
-	int Button1 = 1;
-	int Button2 = 5;
-	int Button3 = 6;
+	int Button1 = CustomScript.instance.Spell1;
+	int Button2 = CustomScript.instance.Spell2;
+	int Button3 = CustomScript.instance.Spell3;
 	// The above are so that each button can keep track of it's value. 
 
-	public string PlayerName = "Jeffrey"; // Default Value, should be set in CustomScreen by Player
+	string PlayerName = CustomScript.instance.UserName; // Default Value, should be set in CustomScreen by Player
 	string EnemyName = "Slime"; // Default Value, will be changed after each fight
 
 	public Text NarrateText;
@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
 	public Text MPNum;
 	public Text EnemyNameText;
 	public Text EnemyHPNum;
+	public Text BTN1Text;
+	public Text BTN2Text;
+	public Text BTN3Text;
 
 	public InputField NameField;
 
@@ -82,6 +85,7 @@ public class GameManager : MonoBehaviour
 
 	public void ReturnToTitle()
 	{
+		Destroy(CustomScript.instance); // This prevents bugs in later scenes and lets the game restart properly. 
 		SceneManager.LoadScene("TitleScreen");
 	}
 
@@ -95,7 +99,13 @@ public class GameManager : MonoBehaviour
 		newPosition.x = -51;
 		Dragon.transform.position = newPosition;
 		UpdateUI();
-	/*	StartCoroutine();*/
+
+		// Setting Button Labels:
+
+		SetButton1();
+		SetButton2();
+		SetButton3();
+
 	}
 
 	// Update is called once per frame
@@ -308,8 +318,8 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			PlayerMP -= 15;
-			PlayerHP += 10;
+			PlayerMP -= 10;
+			PlayerHP += 15;
 			NarrateText.text = ("The player heals themselves, erasing grievous wounds.");
 			HealEffect.Play();
 			ChooseEnemyAction();
@@ -341,7 +351,7 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			PlayerMP -= 5;
-			EnemyHP -= 50;
+			EnemyHP -= 75;
 			NarrateText.text = ("The player sends a missile of energy at the " + EnemyName + ", forcing it back.");
 			MagicMissileEffect.Play();
 			ChooseEnemyAction();
@@ -358,7 +368,7 @@ public class GameManager : MonoBehaviour
 		{
 			PlayerMP -= 10;
 			EnemyHP -= 50;
-			PlayerHP += 50;
+			PlayerHP += 5;
 			NarrateText.text = ("The player steals life energy from their foe, reinforcing their own life force.");
 			LifeDrainEffect.Play();
 			ChooseEnemyAction();
@@ -368,7 +378,7 @@ public class GameManager : MonoBehaviour
 	public void LifeForceBomb()
 	{
 		PlayerHP -= 10;
-		EnemyHP -= 300;
+		EnemyHP -= 200;
 		NarrateText.text = ("The player uses their own life force in place of mana to attack their opponent");
 		LifeBombEffect.Play();
 		ChooseEnemyAction();
@@ -414,7 +424,7 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			EnemyHP -= ((PlayerMP * 4) + (PlayerHP * 5));
+			EnemyHP -= ((PlayerMP * 3 + 100) + (PlayerHP * 3 + 100));
 			PlayerMP = 0;
 			PlayerHP = 1;
 			NarrateText.text = ("The player uses every last ounce of their magical and physical energy in an all-out attack against their enemy");
@@ -447,7 +457,7 @@ public class GameManager : MonoBehaviour
     {
 		NarrateText.text = ("The Salamander breathes fire at the player, burning them.");
 		FireBreathEffect.Play();
-		PlayerHP -= 20 / (PlayerDEF / 10);
+		PlayerHP -= 10 / (PlayerDEF / 10);
 		UpdateUI();
 	}
 
@@ -509,6 +519,7 @@ public class GameManager : MonoBehaviour
 
 	public void Victory()
     {
+		Destroy(CustomScript.instance); // This prevents bugs in later scenes and lets the game restart properly. 
 		SceneManager.LoadScene("VictoryScreen");
 	}
 
@@ -528,6 +539,120 @@ public class GameManager : MonoBehaviour
 			Victory();
         }
     }
+
+	public void SetButton1()
+    {
+		switch (Button1)
+		{
+			case 1:
+				BTN1Text.text = "Fireball";
+				break;
+			case 2:
+				BTN1Text.text = "Heal";
+				break;
+			case 3:
+				BTN1Text.text = "Lightning";
+				break;
+			case 4:
+				BTN1Text.text = "Magic Missile";
+				break;
+			case 5:
+				BTN1Text.text = "LifeDrain";
+				break;
+			case 6:
+				BTN1Text.text = "LifeBomb";
+				break;
+			case 7:
+				BTN1Text.text = "Reinforce";
+				break;
+			case 8:
+				BTN1Text.text = "Bolster";
+				break;
+			case 9:
+				BTN1Text.text = "Last Resort";
+				break;
+			case 10:
+				BTN1Text.text = "Splice";
+				break;
+		}
+	}
+
+	public void SetButton2()
+	{
+
+		switch (Button2)
+		{
+			case 1:
+				BTN2Text.text = "Fireball";
+				break;
+			case 2:
+				BTN2Text.text = "Heal";
+				break;
+			case 3:
+				BTN2Text.text = "Lightning";
+				break;
+			case 4:
+				BTN2Text.text = "Magic Missile";
+				break;
+			case 5:
+				BTN2Text.text = "LifeDrain";
+				break;
+			case 6:
+				BTN2Text.text = "LifeBomb";
+				break;
+			case 7:
+				BTN2Text.text = "Reinforce";
+				break;
+			case 8:
+				BTN2Text.text = "Bolster";
+				break;
+			case 9:
+				BTN2Text.text = "Last Resort";
+				break;
+			case 10:
+				BTN2Text.text = "Splice";
+				break;
+		}
+	}
+
+	public void SetButton3()
+	{
+
+		switch (Button3)
+		{
+			case 1:
+				BTN3Text.text = "Fireball";
+				break;
+			case 2:
+				BTN3Text.text = "Heal";
+				break;
+			case 3:
+				BTN3Text.text = "Lightning";
+				break;
+			case 4:
+				BTN3Text.text = "Magic Missile";
+				break;
+			case 5:
+				BTN3Text.text = "LifeDrain";
+				break;
+			case 6:
+				BTN3Text.text = "LifeBomb";
+				break;
+			case 7:
+				BTN3Text.text = "Reinforce";
+				break;
+			case 8:
+				BTN3Text.text = "Bolster";
+				break;
+			case 9:
+				BTN3Text.text = "Last Resort";
+				break;
+			case 10:
+				BTN3Text.text = "Splice";
+				break;
+		}
+	}
+
 
 	/*	public void FadeToBlack() {
 			while (FadeBlack.color.a <= 255)

@@ -1191,7 +1191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6124bac8499f648809ace2f4066632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerName: Jeffrey
   NarrateText: {fileID: 431548978}
   ATKText: {fileID: 1330134113}
   DEFText: {fileID: 126018788}
@@ -1200,6 +1199,9 @@ MonoBehaviour:
   MPNum: {fileID: 1159001808}
   EnemyNameText: {fileID: 678727523}
   EnemyHPNum: {fileID: 813324095}
+  BTN1Text: {fileID: 259251126}
+  BTN2Text: {fileID: 1944472395}
+  BTN3Text: {fileID: 815433068}
   NameField: {fileID: 123452518}
   HPMeter: {fileID: 1008158791}
   MPMeter: {fileID: 763128888}
@@ -4758,7 +4760,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6a749a4e58e28c84c976028f49f218fb, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b4fe1c443e8269b4f8cc30356122b077, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.501
   m_Pitch: 1

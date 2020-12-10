@@ -6,13 +6,13 @@ Pick your spells from a larger set, and head off into the dungeon in search of t
 Snapshots:
 
 Title Screen:
-https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/TitleScreen.jpg
+![alt text](https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/TitleScreen.jpg "Title Screen")
 
 Spell Selection Screen:
-https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/SpellScreen.jpg
+![alt text](https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/SpellScreen.jpg "Spell Selection Screen")
 
 Slime Fight:
-https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/Slimefight.jpg
+![alt text](https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/Slimefight.jpg "Slime Fight")
 
 Dragon Fight:
-https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/DragonFight.jpg
+![alt text](https://shepard-jeffrey.github.io/csc470-fall2020/exercises/final/ScreenShots/DragonFight.jpg "Dragon Fight")

@@ -485,10 +485,13 @@ public class GameManager : MonoBehaviour
 
 	public void BattleLost()
 	{
-		HPNum.text = "0";
-		UpdateUI();
-		NarrateText.text = ("The player was unable to overcome their enemy. Click the Attack Button to restart the fight. Click any of the Spell Buttons to return to the title screen");
-		Lost = true;
+		if (EnemyHP > 1) // This ensures that you can still win with Last Resort, final enemy attack can't lose you the battle.
+		{
+			HPNum.text = "0";
+			UpdateUI();
+			NarrateText.text = ("The player was unable to overcome their enemy. Click the Attack Button to restart the fight. Click any of the Spell Buttons to return to the title screen");
+			Lost = true;
+		}
 	}
 
 	public void RestoreDefaults() // making this to refill the player and enemy for fight. 

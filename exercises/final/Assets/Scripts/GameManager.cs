@@ -457,7 +457,7 @@ public class GameManager : MonoBehaviour
     {
 		if (Enemy == 2 && EnemyHP > 1) // this is only here to prevent the enemy from making one last attack after dying.
 		{
-			NarrateText.text = ("The Salamander breathes fire at the player, burning them.");
+			NarrateText.text = ("The Dragon breathes fire at the player, burning them.");
 			FireBreathEffect.Play();
 			PlayerHP -= 10 / (PlayerDEF / 10);
 			UpdateUI();
